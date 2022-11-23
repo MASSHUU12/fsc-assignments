@@ -13,7 +13,7 @@ Dane które potrzebujemy wyciągnąć do pliku CSV:
 - Trade
 - NTE (jako liczba float - bez formatowania)
 - Store ID
-- Adres z rozbiciem na ulica:
+- Adres z rozbiciem na:
   - ulica
   - miasto,
   - stan (2 litery)
