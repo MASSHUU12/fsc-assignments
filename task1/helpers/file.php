@@ -1,5 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+define("ERR_FILE_OPENING", "File opening failed");
+define("ERR_NO_FILE", "File does not exists");
+define("ERR_HTML_LOADING", "HTML loading failed");
+define("ERR_GENERATING_CSV", "There was a problem when generating the CSV file");
+
 /**
  * Class for loading HTML files and writing to CSV files
  */
@@ -13,10 +20,10 @@ class File
     if (file_exists($path)) {
       $file = file_get_contents($path);
 
-      if (!$file) throw new Error("File opening failed");
+      if (!$file) throw new Error(ERR_FILE_OPENING);
 
       return $file;
-    } else throw new Error("File does not exists");
+    } else throw new Error(ERR_NO_FILE);
   }
 
   /**
@@ -31,7 +38,7 @@ class File
      * If everything went well, the HTML is returned, and if not,
      * the actual error is thrown thanks to if
      */
-    if (!@$dom->loadHTML($file)) throw new Error("HTML loading failed");
+    if (!@$dom->loadHTML($file)) throw new Error(ERR_HTML_LOADING);
 
     return $dom;
   }
@@ -39,16 +46,16 @@ class File
   /**
    * Writes data to CSV file
    */
-  public static function writeCSV($arr): void
+  public static function writeCSV(array $arr): void
   {
     $fp = fopen("./result.csv", "w+");
 
     if ($fp) {
-      echo "<br /><h3>Successfully generated result.csv file</h3>";
-
       // Write CSV to file
-      fputcsv($fp, array_keys($arr));
-      fputcsv($fp, array_values($arr));
-    } else echo "An error occurred while generating the result.csv file";
+      if (!fputcsv($fp, array_keys($arr))) throw new Error(ERR_GENERATING_CSV);
+      if (!fputcsv($fp, array_values($arr))) throw new Error(ERR_GENERATING_CSV);
+
+      echo "<br /><h3>Successfully generated result.csv file</h3>";
+    } else throw new Error(ERR_GENERATING_CSV);
   }
 }
