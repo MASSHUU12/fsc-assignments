@@ -41,7 +41,7 @@ class File
    */
   public static function writeCSV($arr): void
   {
-    $fp = fopen("./output/result.csv", "w+");
+    $fp = fopen("./result.csv", "w+");
 
     if ($fp) {
       echo "<br /><h3>Successfully generated result.csv file</h3>";
